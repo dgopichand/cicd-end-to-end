@@ -21,7 +21,7 @@ pipeline {
                 script{
                     sh '''
                     echo 'Buid Docker Image'
-                    docker build -t cicd-e2e:${BUILD_NUMBER} .
+                    docker build -t dgopichand/cicd-e2e:${BUILD_NUMBER} .
                     '''
                 }
             }
@@ -32,7 +32,7 @@ pipeline {
                 script{
                     sh '''
                     echo 'Push to Repo'
-                    docker push cicd-e2e:${BUILD_NUMBER}
+                    docker push dgopichand/cicd-e2e:${BUILD_NUMBER}
                     '''
                 }
             }
