@@ -51,9 +51,18 @@ pipeline {
                 script{
                     withCredentials([usernamePassword(credentialsId: '4adc74be-f9bb-49e7-b0be-a2f88f32c31a', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USERNAME')]) {
                         sh '''
+                        cd argocd
+                        
+                        # Check the content before updating
                         cat deploy.yaml
+                        
+                        # Update the deployment file version
                         sed -i "s/v1/v${BUILD_NUMBER}/g" deploy.yaml
+
+                        # Display the updated content
                         cat deploy.yaml
+
+                        # Commit and push changes
                         git add deploy.yaml
                         git commit -m 'Updated the deploy yaml | Jenkins Pipeline'
                         git remote -v
