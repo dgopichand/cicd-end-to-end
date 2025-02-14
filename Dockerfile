@@ -1,18 +1,23 @@
-# Use a stable Python version (avoid latest due to breaking changes)
-FROM python:3.12
+# Use a compatible Python version (3.10, since Django 3.2 is known to work well with it)
+FROM python:3.10
 
-# Set working directory inside the container
+# Set working directory
 WORKDIR /app
 
-# Install dependencies
-RUN apt-get update && apt-get install -y python3-setuptools && \
-    pip install --upgrade pip && \
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    python3-distutils \
+    python3-setuptools \
+    && rm -rf /var/lib/apt/lists/*
+
+# Upgrade pip and install dependencies
+RUN pip install --upgrade pip && \
     pip install django==3.2
 
-# Copy all files to the working directory
+# Copy project files
 COPY . .
 
-# Run migrations (will fail the build if migrations fail)
+# Run migrations (fail the build if migrations don't work)
 RUN python manage.py migrate
 
 # Expose port 8000
